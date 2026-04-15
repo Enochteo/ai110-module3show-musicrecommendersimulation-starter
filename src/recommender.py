@@ -57,9 +57,9 @@ class Recommender:
         score = 0.0
         reasons: List[str] = []
 
-        # Balanced categorical weights: mood and genre are equally important.
+        # Experiment: half genre weight and double energy contribution.
         if song.genre.lower().strip() == user.favorite_genre.lower().strip():
-            genre_points = 2.5
+            genre_points = 1.25
             score += genre_points
             reasons.append(f"genre match (+{genre_points:.1f})")
 
@@ -69,7 +69,7 @@ class Recommender:
             reasons.append(f"mood match (+{mood_points:.1f})")
 
         energy_diff = abs(song.energy - user.target_energy)
-        energy_points = max(0.0, 3.0 * (1.0 - energy_diff))
+        energy_points = max(0.0, 6.0 * (1.0 - energy_diff))
         score += energy_points
         if energy_points >= 2.0:
             reasons.append(f"energy fit (+{energy_points:.2f})")
@@ -124,11 +124,11 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     score = 0.0
     reasons: List[str] = []
 
-    # Point strategy (dataset-informed balance):
-    # - Genre and Mood each get 2.5 points (5.0 total categorical points)
+    # Point strategy (experiment):
+    # - Genre gets 1.25 points (half weight), Mood gets 2.5 points
     # - Numeric similarity contributes up to 5.0 points total
     if song["genre"].lower().strip() == user_prefs["favorite_genre"].lower().strip():
-        genre_points = 2.5
+        genre_points = 1.25
         score += genre_points
         reasons.append(f"genre match (+{genre_points:.1f})")
 
@@ -139,7 +139,7 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
 
     # Stronger numeric signals in this catalog.
     numeric_weights = {
-        "energy": 1.2,
+        "energy": 2.4,
         "tempo_bpm": 1.0,
         "valence": 0.9,
         "danceability": 0.8,
