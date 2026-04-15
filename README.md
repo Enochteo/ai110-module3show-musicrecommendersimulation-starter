@@ -261,3 +261,13 @@ A few sentences about what you learned:
 ```
 
 ![Reccomendations](image.png)
+
+![Chill Lofi](image-1.png)
+
+![Deep Intense Rock](image-2.png)
+
+![High energy sad](image-3.png)
+
+![Unknown labels](image-4.png)
+
+![Quiet Club Paradox](image-5.png)
