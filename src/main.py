@@ -12,22 +12,48 @@ You will implement the functions in recommender.py:
 from recommender import load_songs, recommend_songs
 
 
+TASTE_PROFILE = {
+    "favorite_genre": "indie pop",
+    "favorite_mood": "happy",
+    "target_energy": 0.78,
+    "target_tempo_bpm": 122.0,
+    "target_valence": 0.82,
+    "target_danceability": 0.80,
+    "target_acousticness": 0.30,
+    "target_speechiness": 0.07,
+    "target_instrumentalness": 0.06,
+    "target_liveness": 0.13,
+    "target_loudness_db": -7.0,
+    # Compatibility keys for starter scoring logic.
+    "genre": "indie pop",
+    "mood": "happy",
+    "energy": 0.78,
+}
+
+
 def main() -> None:
     songs = load_songs("data/songs.csv") 
 
-    # Starter example profile
-    user_prefs = {"genre": "pop", "mood": "happy", "energy": 0.8}
+    # Concrete taste profile for recommendation comparisons.
+    user_prefs = TASTE_PROFILE.copy()
 
     recommendations = recommend_songs(user_prefs, songs, k=5)
 
-    print("\nTop recommendations:\n")
-    for rec in recommendations:
-        # You decide the structure of each returned item.
-        # A common pattern is: (song, score, explanation)
+    print("\nTop Recommendations")
+    print("=" * 72)
+    for idx, rec in enumerate(recommendations, start=1):
         song, score, explanation = rec
-        print(f"{song['title']} - Score: {score:.2f}")
-        print(f"Because: {explanation}")
-        print()
+        reasons = [r.strip() for r in explanation.split(",") if r.strip()]
+
+        print(f"{idx}. {song['title']}")
+        print(f"   Final Score : {score:.2f} / 10.00")
+        print("   Reasons     :")
+        if reasons:
+            for reason in reasons:
+                print(f"     - {reason}")
+        else:
+            print("     - overall profile similarity")
+        print("-" * 72)
 
 
 if __name__ == "__main__":
